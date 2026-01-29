@@ -7,3 +7,8 @@ terraform {
     encrypt        = true
   }
 }
+module "iam" {
+  source = "./modules/iam"
+
+  cluster_name = "kubeforge"
+}
