@@ -2,40 +2,77 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "Kuberforge-app"
-        IMAGE_TAG = "latest"
+        APP_NAME    = "kubeforge-app"
+        AWS_REGION = "ap-south-1"
+        DEPLOY_ENABLED = "false"
     }
 
     stages {
+
         stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build docker image'){
-            steps [
-                sh '''
-                    docker build -t $(APP_NAME):$(IMAGE_TAG) ./app
-                '''
-            ]
+        stage('Set Build Metadata') {
+            steps {
+                script {
+                    GIT_COMMIT_SHORT = sh(
+                        script: "git rev-parse --short HEAD",
+                        returnStdout: true
+                    ).trim()
+
+                    IMAGE_TAG = "${GIT_COMMIT_SHORT}"
+                    IMAGE_NAME = "${APP_NAME}:${IMAGE_TAG}"
+
+                    echo "Image: ${IMAGE_NAME}"
+                }
+            }
         }
 
-        stage('Smoke Test') {
+        stage('Build Docker Image') {
             steps {
                 sh '''
-                    echo "Basic CI checks passed"
+                  docker build -t ${IMAGE_NAME} ./app
                 '''
+            }
+        }
+
+        stage('CI Validation') {
+            steps {
+                sh '''
+                  echo "Running basic CI checks"
+                  echo "Build OK"
+                '''
+            }
+        }
+
+        stage('Push to Registry (CD - gated)') {
+            when {
+                expression { env.DEPLOY_ENABLED == "true" }
+            }
+            steps {
+                echo "CD is enabled — pushing image"
+            }
+        }
+
+        stage('Deploy to Kubernetes (CD - gated)') {
+            when {
+                expression { env.DEPLOY_ENABLED == "true" }
+            }
+            steps {
+                echo "Deploying to Kubernetes using Blue-Green strategy"
             }
         }
     }
 
     post {
         success {
-            echo "CI pipeline completed successfully"
+            echo "Pipeline completed successfully"
         }
         failure {
-            echo "CI pipeline failed"
+            echo "Pipeline failed"
         }
     }
 }
