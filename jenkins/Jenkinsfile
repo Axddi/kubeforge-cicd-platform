@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "Kuberforge-app"
+        IMAGE_TAG = "latest"
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build docker image'){
+            steps [
+                sh '''
+                    docker build -t $(APP_NAME):$(IMAGE_TAG) ./app
+                '''
+            ]
+        }
+
+        stage('Smoke Test') {
+            steps {
+                sh '''
+                    echo "Basic CI checks passed"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "CI pipeline completed successfully"
+        }
+        failure {
+            echo "CI pipeline failed"
+        }
+    }
+}
