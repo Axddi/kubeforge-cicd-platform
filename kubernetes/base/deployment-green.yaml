@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Kuberforge-green
+spec:
+  replicas:2
+  selector:
+    matchLabels:
+      app: Kuberforge
+      version: green
+  template:
+    metadata:
+      labels: 
+        app: Kuberforge
+        version: green
+    spec:
+      containers:
+      - name: kuberforge-app
+        image: kuberforge-app:green
+        ports:
+        - containerPort: 8080

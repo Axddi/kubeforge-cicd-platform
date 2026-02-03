@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubeforge-service
+spec:
+  type: ClusterIP
+  selector:
+    app: kubeforge
+    version: blue
+  ports:
+  - port: 80
+    targetPort: 8080
