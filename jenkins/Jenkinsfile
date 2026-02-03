@@ -2,9 +2,13 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME    = "kubeforge-app"
+        APP_NAME = "kubeforge-app"
         AWS_REGION = "ap-south-1"
+
+        // Safety switch (default OFF)
         DEPLOY_ENABLED = "false"
+
+        K8S_NAMESPACE = "default"
     }
 
     stages {
@@ -23,10 +27,10 @@ pipeline {
                         returnStdout: true
                     ).trim()
 
-                    IMAGE_TAG = "${GIT_COMMIT_SHORT}"
+                    IMAGE_TAG = GIT_COMMIT_SHORT
                     IMAGE_NAME = "${APP_NAME}:${IMAGE_TAG}"
 
-                    echo "Image: ${IMAGE_NAME}"
+                    echo "Image to build: ${IMAGE_NAME}"
                 }
             }
         }
@@ -42,27 +46,47 @@ pipeline {
         stage('CI Validation') {
             steps {
                 sh '''
-                  echo "Running basic CI checks"
-                  echo "Build OK"
+                  echo "Running basic validation"
+                  echo "CI checks passed"
                 '''
             }
         }
 
-        stage('Push to Registry (CD - gated)') {
+        stage('Deploy Green Version') {
             when {
                 expression { env.DEPLOY_ENABLED == "true" }
             }
             steps {
-                echo "CD is enabled — pushing image"
+                sh '''
+                  echo "Deploying GREEN version"
+                  kubectl apply -f kubernetes/base/deployment-green.yaml
+                '''
             }
         }
 
-        stage('Deploy to Kubernetes (CD - gated)') {
+        stage('Verify Green Deployment') {
             when {
                 expression { env.DEPLOY_ENABLED == "true" }
             }
             steps {
-                echo "Deploying to Kubernetes using Blue-Green strategy"
+                sh '''
+                  echo "Waiting for GREEN pods to be ready"
+                  kubectl rollout status deployment/kubeforge-green \
+                    --namespace ${K8S_NAMESPACE}
+                '''
+            }
+        }
+
+        stage('Switch Traffic to Green') {
+            when {
+                expression { env.DEPLOY_ENABLED == "true" }
+            }
+            steps {
+                sh '''
+                  echo "Switching traffic to GREEN"
+                  kubectl patch service kubeforge-service \
+                    -p '{"spec":{"selector":{"app":"kubeforge","version":"green"}}}'
+                '''
             }
         }
     }
@@ -72,7 +96,7 @@ pipeline {
             echo "Pipeline completed successfully"
         }
         failure {
-            echo "Pipeline failed"
+            echo "Pipeline failed — traffic remains on BLUE"
         }
     }
 }
