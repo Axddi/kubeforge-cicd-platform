@@ -4,10 +4,7 @@ pipeline {
     environment {
         APP_NAME = "kubeforge-app"
         AWS_REGION = "ap-south-1"
-
-        // Safety switch (default OFF)
         DEPLOY_ENABLED = "false"
-
         K8S_NAMESPACE = "default"
     }
 
@@ -37,9 +34,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                  docker build -t ${IMAGE_NAME} ./app
-                '''
+                sh "docker build -t kubeforge-app:${IMAGE_TAG} ./app"
+
             }
         }
 
