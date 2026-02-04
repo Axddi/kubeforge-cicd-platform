@@ -44,8 +44,8 @@ Kubeforge uses a **Service‑based Blue‑Green deployment model**:
 * Both versions run simultaneously
 * A single Kubernetes Service routes traffic using label selectors
 
-![Blue Green Deployment](docs\images\blue-green.png)
-![Blue Green](docs\images\pod-switch.png)
+![Blue Green Deployment](docs/images/blue-green.png)
+![Blue Green](docs/images/pod-switch.png)
 
 ### Traffic Switching
 
@@ -76,7 +76,7 @@ terraform destroy
 ```
 
 ---
-![IAC](docs\images\iac.png)
+![IAC](docs/images/iac.png)
 
 
 ## CI/CD Pipeline (Jenkins)
@@ -94,8 +94,8 @@ The Jenkins pipeline is defined using a **Declarative Jenkinsfile**.
 7. **Switch Traffic to Green** – Updates Service selector
 
 If any stage fails, traffic **remains on Blue**, ensuring safety.
-![Jenkins Pipelie](docs\images\jenkins-dash.png)
-![Jenkins Pipeline](docs\images\jenkins.png)
+![Jenkins Pipelie](docs/images/jenkins-dash.png)
+![Jenkins Pipeline](docs/images/jenkins.png)
 
 ---
 
@@ -133,7 +133,7 @@ Kubernetes manifests define:
 The cluster is validated using **sequential workload execution** to remain cost‑efficient.
 
 ---
-![k8s](docs\images\eks.png)
+![k8s](docs/images/eks.png)
 
 
 ## Monitoring & Observability
@@ -143,7 +143,7 @@ The cluster is validated using **sequential workload execution** to remain cost�
 * Deployed inside Kubernetes
 * Scrapes metrics from cluster and pods
 * Validated independently on a minimal node
-![prometheus](docs\images\promtheus.png)
+![prometheus](docs/images/promtheus.png)
 
 ### Grafana
 
@@ -152,7 +152,7 @@ The cluster is validated using **sequential workload execution** to remain cost�
 * Provides visualization and dashboards
 
 Due to cost constraints, Prometheus and Grafana were validated **sequentially**, which preserves architecture correctness while reducing resource usage.
-![grafana](docs\images\grafana.png)
+![grafana](docs/images/grafana.png)
 
 
 ---
