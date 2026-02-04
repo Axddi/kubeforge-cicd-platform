@@ -5,7 +5,7 @@ A **production‑grade CI/CD platform** that automatically builds, tests, and de
 This project is designed to be **resume‑ready**, **interview‑defensible**, and **cost‑aware**, demonstrating real‑world DevOps workflows on a minimal infrastructure setup.
 
 ---
-![Kubeforge Architecture](docs\images\system-arch.png)
+![Kubeforge Architecture](docs/images/system-arch.png)
 
 ## Key Highlights
 
