@@ -157,17 +157,6 @@ Due to cost constraints, Prometheus and Grafana were validated **sequentially**,
 
 ---
 
-## Cost‑Aware Design
-
-* Single‑node EKS cluster
-* Sequential validation of workloads
-* Aggressive cleanup after testing
-* Designed to run within student budgets
-
-This demonstrates **real‑world cost discipline**, a critical DevOps skill.
-
----
-
 ## Validation Artifacts
 
 The project is validated using:
@@ -192,7 +181,7 @@ These artifacts serve as strong, CLI‑based proof of functionality.
 
 ---
 
-## How to Run (High‑Level)
+## How to Run 
 
 1. Provision infrastructure with Terraform
 2. Configure kubeconfig for EKS
