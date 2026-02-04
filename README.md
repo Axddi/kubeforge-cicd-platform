@@ -207,12 +207,12 @@ These artifacts serve as strong, CLI‑based proof of functionality.
 
 ## Project Status
 
-✔ Infrastructure provisioned via Terraform
-✔ CI/CD pipeline implemented with Jenkins
-✔ Dockerized application builds successfully
-✔ Blue‑Green deployment validated
-✔ Monitoring stack validated
-✔ Cost‑controlled teardown completed
+* Infrastructure provisioned via Terraform
+* CI/CD pipeline implemented with Jenkins
+* Dockerized application builds successfully
+* Blue‑Green deployment validated
+* Monitoring stack validated
+* Cost‑controlled teardown completed
 
 ---
 
@@ -226,14 +226,3 @@ These artifacts serve as strong, CLI‑based proof of functionality.
 * Cost‑efficient cloud engineering
 
 ---
-
-## Author
-
-**Aaditya Saxena**
-Aspiring DevOps Engineer
-
----
-
-## Final Note
-
-Kubeforge is not a toy project. It represents **real DevOps problem‑solving**, **production‑grade patterns**, and **engineering trade‑offs** under constraints — exactly what modern DevOps roles require.
